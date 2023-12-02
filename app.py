@@ -30,9 +30,7 @@ def register():
             return "Username must not contain spaces and must be alphanumeric", 400
 
         # Validate password (one number, one uppercase, etc.)
-        if not re.match(
-            r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", password
-        ):
+        if not re.match(r"^(?=.*[A-Z])(?=.*\d).{8,}$", password):
             return "Password must be at least 8 characters long, contain a number and an uppercase letter", 400
 
         # Hash the password
@@ -105,34 +103,45 @@ def home():
     else:
         print(f"User ID in session: {session['user_id']}")
 
-    user_id = session['user_id']  # Get the current user's ID from the session
-
+    user_id = session['user_id']
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
     # Determine the user type (performer or organization)
     cursor.execute("SELECT UserType FROM Users WHERE UserID = ?", (user_id,))
-    # Assuming UserType is in the first column
     user_type = cursor.fetchone()[0]
 
     if user_type == 'musician':
-        # Fetch performance requests
+        # Fetch available events for musicians
         cursor.execute("""
-            SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, e.Status
+            SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, e.Status, 
+                   (SELECT Username FROM Users WHERE UserID = e.OrganizerUserID) as OrganizerName
             FROM Events e
-            WHERE e.Status = 'pending'  -- assuming 'open' status indicates available for performers
+            WHERE e.Status = 'pending'
         """)
+        available_events = cursor.fetchall()
 
-        events = cursor.fetchall()
+        # Fetch confirmed events for the logged-in musician
+        cursor.execute("""
+            SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, 
+                   (SELECT Username FROM Users WHERE UserID = e.OrganizerUserID) as OrganizerName
+            FROM Events e
+            JOIN Bookings b ON e.EventID = b.EventID
+            WHERE b.MusicianUserID = ? AND b.Status = 'confirmed'
+        """, (user_id,))
+        confirmed_events = cursor.fetchall()
+
         conn.close()
+        return render_template('home.html', events=available_events, confirmed_events=confirmed_events)
 
-        return render_template('home.html', events=events)
     elif user_type == 'organization':
         # Render organization dashboard
-        return render_template('organization.html')
+        return redirect(url_for('organization'))
+
     else:
         # Handle other user types (if any) or unexpected cases
         return "Unsupported user type", 400
+
 
 
 @app.route('/apply_for_event/<int:event_id>', methods=['GET', 'POST'])
@@ -242,6 +251,8 @@ def organization():
             WHERE e.OrganizerUserID = ? AND e.Status = 'confirmed'
         """, (user_id,))
         confirmed_events = cursor.fetchall()
+        print("--------CONFIRMED EVENTS--------")
+        print(confirmed_events)
     except sqlite3.Error as e:
         print(e)
         flash("An error occurred while fetching confirmed events.")

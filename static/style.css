@@ -1,13 +1,37 @@
-body, h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: 'Quicksand', sans-serif;
 }
 
+body {
+    background: url('/static/images/home4.JPG') no-repeat center center; /* Background image */
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    position: relative; /* Needed for the overlay positioning */
+    min-height: 100vh; /* Ensure it covers the full viewport height */
+    z-index: -1;
+}
+
+/* White overlay */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5); /* White color with 50% opacity */
+    z-index: 1;
+}
+
 .styled-image {
-    width: 50%; /* Sets the image width to 50% of its original size */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* Drop shadow */
-    display: block; /* To center the image, optional */
-    margin: 0 auto; /* Center the image horizontally */
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    display: block;
+    margin: 0 auto;
     margin-bottom: 60px;
     margin-top: 20px;
 }
@@ -20,12 +44,9 @@ body, h1, h2, h3 {
     color: #fff; /* White color for brand text */
 }
 
-.main {
-    background-color: #ffffff; /* White background for main content */
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for main content */
-    margin-top: 20px;
+.main, .navbar, .navbar-custom {
+    position: relative;
+    z-index: 2;
 }
 
 .form-control {
@@ -43,4 +64,88 @@ body, h1, h2, h3 {
 footer {
     color: #333;
     padding: 20px;
+}
+
+.navbar-custom {
+    background-color: #333; /* Dark background */
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: #fff; /* Light text */
+}
+
+.navbar-custom .nav-link:hover {
+    color: #f0ad4e; /* Change for hover */
+}
+
+.navbar-brand span {
+    transition: all 0.3s ease;
+}
+
+.navbar-brand span:hover {
+    color: #f0ad4e; /* Color change on hover for brand */
+}
+
+
+.landing-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 200px; /* Increase this value as per your design needs */
+    margin-top: 200px; 
+}
+.text-section {
+    width: 50%;
+}
+
+.login-section {
+    width: 40%;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* Rest of login-section styles */
+}
+
+.features {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Align items vertically center */
+}
+
+
+.features > div {
+    width: 30%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    /* Keep other styles as is */
+}
+
+.text-section {
+    color: #ffffff; /* Set text color to white */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add drop shadow for readability */
+    /* Keep other styles as is */
+}
+
+.login-section {
+    background: #ffffff; /* Plain white background */
+    /* Keep other styles as is */
+}
+
+.features > div {
+    background: #ffffff; /* Plain white background for feature columns */
+    /* Keep other styles as is */
+}
+
+/* General approach for all containers except main */
+.container, .navbar, .footer, /* Add other container classes if any */ {
+    background-color: #fff; /* White background */
+    position: relative; /* Bring them above the background */
 }

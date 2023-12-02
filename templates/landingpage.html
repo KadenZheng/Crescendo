@@ -5,31 +5,44 @@ Crescendo - Home
 {% endblock %}
 
 {% block content %}
-<section>
-    <div class="text-center">
-        <h2>Harmonizing Talent</h2>
-        <h5>We orchestrate harmonious connections between young artists and the greater Fresno community to create memorable musical events.</h5>
-        <!-- Images -->
-        <div>
-            <img src="{{ url_for('static', filename='images/crescendo.png') }}" alt="Feature illustration" class="styled-image">
+<div class="main">
+    <section class="landing-container">
+        <div class="landing-top">
+            <div class="text-section">
+                <h1>Harmonizing Talent</h1>
+                <h6>We orchestrate harmonious connections between young artists and the greater Fresno community to
+                    create memorable musical events.</h6>
+            </div>
+            <div class="login-section">
+                <!-- Login Form -->
+                <form action="{{ url_for('login') }}" method="post">
+                    <h3>Login</h3>
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit" class="btn btn-primary"
+                        style="height: 30px; line-height: 0px; margin-bottom: 3px">Log In</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <div>
-        <!-- Feature 1 -->
-        <div>
-            <h3>Talent Matchmaking</h3>
-            <p>Request performances from gifted Fresno musicians with the perfect stages to showcase their artistry.</p>
+        <div class="features">
+            <!-- Feature 1 -->
+            <div>
+                <h3>Talent Matchmaking</h3>
+                <p>Request performances from gifted Fresno musicians with the perfect stages to showcase their artistry.
+                </p>
+            </div>
+            <!-- Feature 2 -->
+            <div>
+                <h3>Performance Scheduling</h3>
+                <p>Effortlessly organize and manage musical events, their details, and special accommodations.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div>
+                <h3>Harmonic Gallery</h3>
+                <p>Explore a vibrant gallery of local talent, where every note tells a story of community and passion.
+                </p>
+            </div>
         </div>
-        <!-- Feature 2 -->
-        <div>
-            <h3>Performance Scheduling</h3>
-            <p>Effortlessly organize and manage musical events, their details, and special accommodations.</p>
-        </div>
-        <!-- Feature 3 -->
-        <div>
-            <h3>Harmonic Gallery</h3>
-            <p>Explore a vibrant gallery of local talent, where every note tells a story of community and passion.</p>
-        </div>
-    </div>
-</section>
+    </section>
+</div>
 {% endblock %}
