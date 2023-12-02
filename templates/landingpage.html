@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Crescendo - Home
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="text-center">
+        <h2>Harmonizing Talent</h2>
+        <h5>We orchestrate harmonious connections between young artists and the greater Fresno community to create memorable musical events.</h5>
+        <!-- Images -->
+        <div>
+            <img src="{{ url_for('static', filename='images/crescendo.png') }}" alt="Feature illustration" class="styled-image">
+        </div>
+    </div>
+    <div>
+        <!-- Feature 1 -->
+        <div>
+            <h3>Talent Matchmaking</h3>
+            <p>Request performances from gifted Fresno musicians with the perfect stages to showcase their artistry.</p>
+        </div>
+        <!-- Feature 2 -->
+        <div>
+            <h3>Performance Scheduling</h3>
+            <p>Effortlessly organize and manage musical events, their details, and special accommodations.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div>
+            <h3>Harmonic Gallery</h3>
+            <p>Explore a vibrant gallery of local talent, where every note tells a story of community and passion.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

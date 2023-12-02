@@ -1,0 +1,46 @@
+body, h1, h2, h3 {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.styled-image {
+    width: 50%; /* Sets the image width to 50% of its original size */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* Drop shadow */
+    display: block; /* To center the image, optional */
+    margin: 0 auto; /* Center the image horizontally */
+    margin-bottom: 60px;
+    margin-top: 20px;
+}
+
+.navbar {
+    background-color: #462749; /* Darker shade for navbar */
+}
+
+.navbar-brand span {
+    color: #fff; /* White color for brand text */
+}
+
+.main {
+    background-color: #ffffff; /* White background for main content */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for main content */
+    margin-top: 20px;
+}
+
+.form-control {
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #8332AC;
+    border-color: #8332AC;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+footer {
+    color: #333;
+    padding: 20px;
+}

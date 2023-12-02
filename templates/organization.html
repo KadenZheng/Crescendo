@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Organization Dashboard - Crescendo
+{% endblock %}
+
+{% block content %}
+<h1>Organization Dashboard</h1>
+<section class="request-event">
+    <h2>Request a Performance Event</h2>
+    <form method="post" action="{{ url_for('request_event') }}">
+        <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+        </div>
+        <div class="mb-3">
+            <label for="time" class="form-label">Time</label>
+            <input type="time" class="form-control" id="time" name="time" required>
+        </div>
+        <div class="mb-3">
+            <label for="venue" class="form-label">Venue</label>
+            <input type="text" class="form-control" id="venue" name="venue" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+    </form>
+</section>
+
+<section class="confirmed-events">
+    <h2>Confirmed Performance Events</h2>
+    {% if confirmed_events %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Event ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Venue</th>
+                <th>Description</th>
+                <th>Musician</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in confirmed_events %}
+            <tr>
+                <td>{{ event[0] }}</td>
+                <td>{{ event[1] }}</td>
+                <td>{{ event[2] }}</td>
+                <td>{{ event[3] }}</td>
+                <td>{{ event[4] }}</td>
+                <td>{{ event[6] }}</td> <!-- Musician's username -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No confirmed events at this time.</p>
+    {% endif %}
+</section>
+{% endblock %}

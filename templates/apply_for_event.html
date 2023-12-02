@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Apply for Event - Crescendo
+{% endblock %}
+
+{% block content %}
+    <h1>Apply for Event</h1>
+    <section class="apply-event">
+        <h2>Event Details</h2>
+        <p><strong>Date:</strong> {{ event[2] }}</p>
+        <p><strong>Time:</strong> {{ event[3] }}</p>
+        <p><strong>Venue:</strong> {{ event[4] }}</p>
+        <p><strong>Description:</strong> {{ event[5] }}</p>
+
+        <form method="post">
+            <button type="submit" class="btn btn-success">Confirm Application</button>
+        </form>
+    </section>
+{% endblock %}
