@@ -4,14 +4,27 @@
 Crescendo - Home
 {% endblock %}
 
+{% block custom_css %}
+<style>
+    body {
+        background-image: url('/static/images/crescendohome.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="main">
     <section class="landing-container">
         <div class="landing-top">
             <div class="text-section">
-                <h1>Harmonizing Talent</h1>
-                <h6>We orchestrate harmonious connections between young artists and the greater Fresno community to
-                    create memorable musical events.</h6>
+                <h1 style="color: #000000; text-shadow: 0 0 20px #ffffff, 0 0 30px #ffffff;">Harmonizing Talent</h1>
+                <h6 style="color: #000000; text-shadow: 0 0 20px #ffffff, 0 0 30px #ffffff;">We orchestrate harmonious
+                    connections between young artists and the greater Fresno community to create memorable musical
+                    events.</h6>
+
+
             </div>
             <div class="login-section">
                 <!-- Login Form -->

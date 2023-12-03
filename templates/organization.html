@@ -5,7 +5,6 @@ Organization Dashboard - Crescendo
 {% endblock %}
 
 {% block content %}
-<h1>Organization Dashboard</h1>
 <section class="request-event">
     <h2>Request a Performance Event</h2>
     <form method="post" action="{{ url_for('request_event') }}">
@@ -25,7 +24,7 @@ Organization Dashboard - Crescendo
             <label for="description" class="form-label">Description</label>
             <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" style="margin: 20px;">Submit Request</button>
+        <button type="submit" class="btn btn-primary" style="margin: 40px;">Submit Request</button>
     </form>
 </section>
 

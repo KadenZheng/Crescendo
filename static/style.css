@@ -5,25 +5,11 @@ h3 {
 }
 
 body {
-    background: url('/static/images/home4.JPG') no-repeat center center; /* Background image */
-    background-size: cover;
     margin: 0;
     padding: 0;
     position: relative; /* Needed for the overlay positioning */
     min-height: 100vh; /* Ensure it covers the full viewport height */
     z-index: -1;
-}
-
-/* White overlay */
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.5); /* White color with 50% opacity */
-    z-index: 1;
 }
 
 .styled-image {
@@ -142,10 +128,4 @@ footer {
 .features > div {
     background: #ffffff; /* Plain white background for feature columns */
     /* Keep other styles as is */
-}
-
-/* General approach for all containers except main */
-.container, .navbar, .footer, /* Add other container classes if any */ {
-    background-color: #fff; /* White background */
-    position: relative; /* Bring them above the background */
 }
