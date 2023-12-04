@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Upload Performance Image</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Select Image</label>
+                            <input type="file" class="form-control" name="file" id="file">
+                        </div>
+                        <button type="submit" class="btn btn-success">Upload</button>
+                    </form>
+                </div>
+            </div>
+
+            {% if uploaded_file_url %}
+                <div class="mt-4 text-center">
+                    <h5 class="mb-3">Uploaded Image Preview</h5>
+                    <img src="{{ uploaded_file_url }}" alt="Uploaded Image" class="img-fluid">
+                    <br>
+                    <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Done</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

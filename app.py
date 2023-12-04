@@ -1,6 +1,7 @@
-from flask import Flask, flash, render_template, request, redirect, url_for, session
+from flask import Flask, flash, render_template, request, redirect, url_for, session, send_from_directory
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 import sqlite3
 import re
 import os
@@ -74,6 +75,8 @@ def login():
             user = cursor.fetchone()
             if user and check_password_hash(user[2], password):
                 session['user_id'] = user[0]  # Store user ID in session
+                session['user_type'] = user[4]
+                print(f"User type set in session: {session['user_type']}")
                 print(f"User ID set in session: {session['user_id']}") 
                 # Redirect to home page after successful login
                 return redirect(url_for('home'))
@@ -260,6 +263,76 @@ def organization():
         conn.close()
 
     return render_template('organization.html', confirmed_events=confirmed_events)
+
+# Assuming you have a directory named 'uploads' in your static folder
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/upload/<int:event_id>', methods=['GET', 'POST'])
+def upload_file(event_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    uploaded_file_url = None
+    if request.method == 'POST':
+        # Check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        file = request.files['file']
+        
+        # If the user does not select a file, browser submits an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # Save the relative path (from 'static') in the database
+            db_file_path = os.path.join('uploads', filename)
+
+            conn = sqlite3.connect(DATABASE)
+            cursor = conn.cursor()
+            try:
+                cursor.execute("INSERT INTO EventImages (EventID, MusicianUserID, ImagePath) VALUES (?, ?, ?)", 
+                            (event_id, session['user_id'], db_file_path))
+                conn.commit()
+            except sqlite3.Error as e:
+                print(e)
+                flash("An error occurred while saving the file information.")
+            finally:
+                conn.close()
+
+            uploaded_file_url = url_for('uploaded_file', filename=filename)
+
+    return render_template('upload.html', event_id=event_id, uploaded_file_url=uploaded_file_url)
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/gallery')
+def gallery():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT ei.ImagePath, e.Date, e.Venue, u.Username
+        FROM EventImages ei
+        JOIN Events e ON ei.EventID = e.EventID
+        JOIN Users u ON ei.MusicianUserID = u.UserID
+    """)
+    images = cursor.fetchall()
+    conn.close()
+    return render_template('gallery.html', images=images)
 
 
 
