@@ -1,7 +1,7 @@
 h1,
 h2,
 h3 {
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Quicksand', sans-serif; /* Custom font */
 }
 
 body {
@@ -78,7 +78,7 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 200px; /* Increase this value as per your design needs */
+    margin-bottom: 200px;
     margin-top: 200px; 
 }
 .text-section {
@@ -91,7 +91,6 @@ footer {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    /* Rest of login-section styles */
 }
 
 .features {
@@ -111,25 +110,21 @@ footer {
     flex-direction: column;
     justify-content: center; /* Center content vertically */
     align-items: center; /* Center content horizontally */
-    /* Keep other styles as is */
 }
 
 .text-section {
     color: #ffffff; /* Set text color to white */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add drop shadow for readability */
-    /* Keep other styles as is */
 }
 
 .login-section {
     background: #ffffff; /* Plain white background */
-    /* Keep other styles as is */
 }
 
 .features > div {
     background: #ffffff; /* Plain white background for feature columns */
-    /* Keep other styles as is */
 }
 
 .custom-nav-item {
-    margin-right: 15px; /* Adjust the space as needed */
+    margin-right: 15px;
 }

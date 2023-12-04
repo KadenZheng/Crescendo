@@ -2,110 +2,133 @@ from flask import Flask, flash, render_template, request, redirect, url_for, ses
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
+import secrets
 import sqlite3
 import re
 import os
 
+# Initialize a Flask application instance
 app = Flask(__name__)
-app.secret_key = '123456789'  # Replace with a random secret key
 
+# Generate a random 32-character hexadecimal string as a secret key
+secret_key = secrets.token_hex(16)
+app.secret_key = secret_key  # Set the secret key for the Flask application
+
+# Define the path to the SQLite database file
 DATABASE = '/Users/laptopcartuser/vscode/crescendo/crescendo.db'
 
 
+# Define a route for the landing page
 @app.route('/')
 def landingpage():
+    # Render and return the 'landingpage.html' template
     return render_template('landingpage.html')
 
 
+# Define a route for user registration with support for GET and POST methods
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    # Check if the request method is POST (form submission)
     if request.method == 'POST':
+        # Retrieve form data
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        user_type = request.form['user_type']  # 'musician' or 'organization'
+        # Expecting 'musician' or 'organization'
+        user_type = request.form['user_type']
+        # Optional profile information
         profile_info = request.form.get('profile_info', '')
 
-        # Validate username (no spaces, unique)
+        # Username validation: No spaces and must be alphanumeric
         if " " in username or not re.match(r"^\w+$", username):
             return "Username must not contain spaces and must be alphanumeric", 400
 
-        # Validate password (one number, one uppercase, etc.)
+        # Password validation: Minimum 8 characters, must include a number and an uppercase letter
         if not re.match(r"^(?=.*[A-Z])(?=.*\d).{8,}$", password):
             return "Password must be at least 8 characters long, contain a number and an uppercase letter", 400
 
-        # Hash the password
+        # Hash the password for secure storage
         hashed_password = generate_password_hash(password)
 
+        # Connect to the database
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
 
         try:
-            # Check if username or email already exists
+            # Check if the username or email already exists in the database
             cursor.execute(
                 "SELECT * FROM Users WHERE Username = ? OR Email = ?", (username, email))
             if cursor.fetchone():
                 return "Username or email already exists", 400
 
-            # Insert new user
+            # Insert the new user into the database
             cursor.execute("INSERT INTO Users (Username, Password, Email, UserType, ProfileInformation) VALUES (?, ?, ?, ?, ?)",
                            (username, hashed_password, email, user_type, profile_info))
-            conn.commit()
+            conn.commit()  # Commit the changes to the database
         except sqlite3.Error as e:
-            print(e)
-            return "An error occurred", 500
+            print(e)  # Print the error for debugging
+            return "An error occurred", 500  # Return an error response
         finally:
-            conn.close()
+            conn.close()  # Close the database connection
 
+        # Redirect the user to the login page upon successful registration
         return redirect(url_for('login'))
+
+    # Render and return the 'register.html' template for GET requests
     return render_template('register.html')
 
 
+# Define a route for login (with support for both GET and POST methods)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Check if the request method is POST (form submission)
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        # Connect to the database
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
 
+        # Fetch the user record from the database
         try:
             cursor.execute("SELECT * FROM Users WHERE username=?", (username,))
             user = cursor.fetchone()
+            # Check if the user exists and the password is correct
             if user and check_password_hash(user[2], password):
                 session['user_id'] = user[0]  # Store user ID in session
                 session['user_type'] = user[4]
-                print(f"User type set in session: {session['user_type']}")
-                print(f"User ID set in session: {session['user_id']}") 
                 # Redirect to home page after successful login
                 return redirect(url_for('home'))
             else:
+                # Return an error message if the username or password is incorrect
                 error_message = "Invalid username or password."
+                # Render and return 'login.html' template with an error message
                 return render_template('login.html', error=error_message)
         except sqlite3.Error as e:
+            # Return an error message if an error occurs while fetching the user record
             print(e)
             error_message = "A database error occurred."
             return render_template('login.html', error=error_message)
         finally:
             conn.close()
     else:
+        # Render and return the 'login.html' template for GET requests
         return render_template('login.html')
 
 
-@app.route('/success')
-def success():
-    return render_template('home.html')
-
-
+# Define a route for the home page (Performer Dashboard)
 @app.route('/home')
 def home():
+    # Check if the user ID is stored in the session
     if 'user_id' not in session:
         print("User ID not in session")
         return redirect(url_for('login'))
     else:
+        # User ID is stored in the session
+        # Debugging purposes
         print(f"User ID in session: {session['user_id']}")
 
+    # Fetch the user record from the database
     user_id = session['user_id']
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
@@ -132,9 +155,11 @@ def home():
             JOIN Bookings b ON e.EventID = b.EventID
             WHERE b.MusicianUserID = ? AND b.Status = 'confirmed'
         """, (user_id,))
+        # Fetch all rows returned by the query
         confirmed_events = cursor.fetchall()
 
         conn.close()
+        # Render musician dashboard passing in the appropriate parameters
         return render_template('home.html', events=available_events, confirmed_events=confirmed_events)
 
     elif user_type == 'organization':
@@ -146,18 +171,21 @@ def home():
         return "Unsupported user type", 400
 
 
-
+# Define a route for applying for an event with GET and POST support
 @app.route('/apply_for_event/<int:event_id>', methods=['GET', 'POST'])
 def apply_for_event(event_id):
+    # Check if the user ID is stored in the session
     if 'user_id' not in session:
         flash("Please log in to apply for events.")
         return redirect(url_for('login'))
 
+    # Fetch the user record from the database
     user_id = session['user_id']
 
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
+    # Check if the user has already applied for the event
     if request.method == 'POST':
         try:
             # Update status in the Events table
@@ -171,6 +199,7 @@ def apply_for_event(event_id):
             conn.commit()
             flash("Application submitted successfully!")
         except sqlite3.Error as e:
+            # Return an error message if an error occurs while fetching the user record
             print(e)
             flash("An error occurred while submitting the application.")
         finally:
@@ -182,25 +211,31 @@ def apply_for_event(event_id):
     cursor.execute("SELECT * FROM Events WHERE EventID = ?", (event_id,))
     event = cursor.fetchone()
     conn.close()
-
+    # Render and return the 'apply_for_event.html' template passing in the events parameter
     return render_template('apply_for_event.html', event=event)
 
 
+# Define a route for logging out
 @app.route('/logout')
 def logout():
+    # Remove the user ID from the session
     session.pop('user_id', None)
-    # You can add more session variables to clear, if needed
+    # Redirect to the landing page
     return redirect(url_for('landingpage'))
 
 
+# Define a route for requesting events with support for POST
 @app.route('/request_event', methods=['POST'])
 def request_event():
+    # Check if the user ID is stored in the session
     if 'user_id' not in session:
         flash("Please log in to request events.")
         return redirect(url_for('login'))
 
+    # Fetch the user record from the database
     user_id = session['user_id']
 
+    # Retrieve form data
     date = request.form['date']
     time = request.form['time']
     venue = request.form['venue']
@@ -208,7 +243,7 @@ def request_event():
 
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-
+    #  Insert the new event into the database
     try:
         cursor.execute("""
             INSERT INTO Events (OrganizerUserID, Date, Time, Venue, Description, Status)
@@ -217,34 +252,37 @@ def request_event():
         conn.commit()
         flash("Event request submitted successfully!")
     except sqlite3.Error as e:
+        # Return an error message if an error occurs while fetching the user record
         print(e)
         flash("An error occurred while submitting the event request.")
     finally:
         conn.close()
-
+        # Redirect to the organization home page
     return redirect(url_for('organization'))
 
 
+# Define a route for viewing organization events / organization home page
 @app.route('/organization')
 def organization():
+    # Check if the user ID is stored in the session
     if 'user_id' not in session:
         flash("Please log in to view this page.")
         return redirect(url_for('login'))
 
+    # Fetch the user record from the database
     user_id = session['user_id']
     print(f"User ID in organization route: {user_id}")  # Debugging statement
 
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-
+    # Fetch confirmed events for the logged-in organization
     cursor.execute("SELECT * FROM Users WHERE UserID = ?", (user_id,))
     user_record = cursor.fetchone()
     if not user_record:
         flash("User record not found.")
         return redirect(url_for('login'))
-    print(f"User record: {user_record}")  # Debugging statement
 
-
+    # Fetch confirmed events for the logged-in organization
     try:
         cursor.execute("""
             SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, 
@@ -253,31 +291,40 @@ def organization():
             LEFT JOIN Bookings b ON e.EventID = b.EventID AND b.Status = 'confirmed'
             WHERE e.OrganizerUserID = ? AND e.Status = 'confirmed'
         """, (user_id,))
+        # Fetch all rows returned by the query
         confirmed_events = cursor.fetchall()
-        print("--------CONFIRMED EVENTS--------")
-        print(confirmed_events)
     except sqlite3.Error as e:
+        # Return an error message if an error occurs while fetching the user record
         print(e)
         flash("An error occurred while fetching confirmed events.")
     finally:
         conn.close()
 
+    # Render organization dashboard
     return render_template('organization.html', confirmed_events=confirmed_events)
 
-# Assuming you have a directory named 'uploads' in your static folder
+
+# Reference the directory named 'uploads' in the 'static' folder
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+# Configure the upload folder
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 def allowed_file(filename):
+    # Check if the file extension is allowed
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+# Define a route for uploading files
 @app.route('/upload/<int:event_id>', methods=['GET', 'POST'])
 def upload_file(event_id):
+    # Check if the user ID is stored in the session
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    # Fetch the user record from the database
     uploaded_file_url = None
     if request.method == 'POST':
         # Check if the post request has the file part
@@ -285,13 +332,15 @@ def upload_file(event_id):
             flash('No file part')
             return redirect(request.url)
 
+        # Retrieve the file from the request
         file = request.files['file']
-        
+
         # If the user does not select a file, browser submits an empty part without filename
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
 
+        # If the file is valid, save it to the upload folder
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -302,26 +351,27 @@ def upload_file(event_id):
 
             conn = sqlite3.connect(DATABASE)
             cursor = conn.cursor()
+            # Insert the new event image into the database
             try:
-                cursor.execute("INSERT INTO EventImages (EventID, MusicianUserID, ImagePath) VALUES (?, ?, ?)", 
-                            (event_id, session['user_id'], db_file_path))
+                cursor.execute("INSERT INTO EventImages (EventID, MusicianUserID, ImagePath) VALUES (?, ?, ?)",
+                               (event_id, session['user_id'], db_file_path))
                 conn.commit()
             except sqlite3.Error as e:
+                # Return an error message if an error occurs while saving the image
                 print(e)
                 flash("An error occurred while saving the file information.")
             finally:
                 conn.close()
-
             uploaded_file_url = url_for('uploaded_file', filename=filename)
 
+    # Render and return the 'upload.html' template with the event_id and uploaded_file_url parameters
     return render_template('upload.html', event_id=event_id, uploaded_file_url=uploaded_file_url)
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+# Define a route for the gallery
 @app.route('/gallery')
 def gallery():
+    # Fetch the user record from the database
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute("""
@@ -330,11 +380,13 @@ def gallery():
         JOIN Events e ON ei.EventID = e.EventID
         JOIN Users u ON ei.MusicianUserID = u.UserID
     """)
+    # Assign the images parameter to the list of images returned by the query
     images = cursor.fetchall()
     conn.close()
+    # Render and return the 'gallery.html' template with the images parameter
     return render_template('gallery.html', images=images)
 
 
-
+# Run the Flask application
 if __name__ == '__main__':
     app.run(debug=True)
