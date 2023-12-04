@@ -129,3 +129,7 @@ footer {
     background: #ffffff; /* Plain white background for feature columns */
     /* Keep other styles as is */
 }
+
+.custom-nav-item {
+    margin-right: 15px; /* Adjust the space as needed */
+}

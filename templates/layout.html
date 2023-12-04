@@ -26,7 +26,7 @@
     <nav class="navbar navbar-expand-md navbar-custom navbar-dark">
         <div class="container-fluid">
             <!-- Logo/Brand -->
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" style="margin-left: 15px;" href="/">
                 <span style="color: #FFFFFF;">C</span>
                 <span style="color: #F2D1C9;">R</span>
                 <span style="color: #E086D3;">E</span>
@@ -46,22 +46,25 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if session.user_id %}
-                    <li class="nav-item">
+                    <li class="nav-item custom-nav-item">
                         <a class="nav-link" href="{{ url_for('gallery') }}">Gallery</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item custom-nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                     </li>
                     {% else %}
-                    <li class="nav-item">
+                    <li class="nav-item custom-nav-item">
+                        <a class="nav-link" href="{{ url_for('gallery') }}">Gallery</a>
+                    </li>
+                    <li class="nav-item custom-nav-item">
                         <a class="nav-link" href="{{ url_for('register') }}">Register</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item custom-nav-item">
                         <a class="nav-link" href="{{ url_for('login') }}">Log In</a>
                     </li>
                     {% endif %}
                 </ul>
-            </div>
+            </div>            
         </div>
     </nav>
 
