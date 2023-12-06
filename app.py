@@ -146,20 +146,18 @@ def home():
             WHERE e.Status = 'pending'
         """)
         available_events = cursor.fetchall()
-
-        # Fetch confirmed events for the logged-in musician
+        
+        # Fetch confirmed events for musicians
         cursor.execute("""
-            SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, 
+            SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description,
                    (SELECT Username FROM Users WHERE UserID = e.OrganizerUserID) as OrganizerName
             FROM Events e
             JOIN Bookings b ON e.EventID = b.EventID
             WHERE b.MusicianUserID = ? AND b.Status = 'confirmed'
         """, (user_id,))
-        # Fetch all rows returned by the query
         confirmed_events = cursor.fetchall()
 
         conn.close()
-        # Render musician dashboard passing in the appropriate parameters
         return render_template('home.html', events=available_events, confirmed_events=confirmed_events)
 
     elif user_type == 'organization':
@@ -286,12 +284,12 @@ def organization():
     try:
         cursor.execute("""
             SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, 
-                   (SELECT Username FROM Users WHERE UserID = b.MusicianUserID)
+                   u.Username, u.ProfileInformation
             FROM Events e
             LEFT JOIN Bookings b ON e.EventID = b.EventID AND b.Status = 'confirmed'
+            LEFT JOIN Users u ON b.MusicianUserID = u.UserID
             WHERE e.OrganizerUserID = ? AND e.Status = 'confirmed'
         """, (user_id,))
-        # Fetch all rows returned by the query
         confirmed_events = cursor.fetchall()
     except sqlite3.Error as e:
         # Return an error message if an error occurs while fetching the user record
@@ -302,6 +300,34 @@ def organization():
 
     # Render organization dashboard
     return render_template('organization.html', confirmed_events=confirmed_events)
+
+@app.route('/delete_event/<int:event_id>', methods=['POST'])
+def delete_event(event_id):
+    if 'user_id' not in session:
+        flash("Please log in to perform this action.")
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+
+    try:
+        # Delete from Bookings table
+        cursor.execute("DELETE FROM Bookings WHERE EventID = ?", (event_id,))
+
+        # Delete from Events table
+        cursor.execute("DELETE FROM Events WHERE EventID = ?", (event_id,))
+
+        conn.commit()
+        flash("Event deleted successfully!")
+    except sqlite3.Error as e:
+        print(e)
+        flash("An error occurred while deleting the event.")
+    finally:
+        conn.close()
+
+    return redirect(url_for('organization'))
+
+
 
 
 # Reference the directory named 'uploads' in the 'static' folder
@@ -367,6 +393,12 @@ def upload_file(event_id):
     # Render and return the 'upload.html' template with the event_id and uploaded_file_url parameters
     return render_template('upload.html', event_id=event_id, uploaded_file_url=uploaded_file_url)
 
+
+# Define a route for uploading file/image
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    # Logic to display the uploaded file
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # Define a route for the gallery
 @app.route('/gallery')
