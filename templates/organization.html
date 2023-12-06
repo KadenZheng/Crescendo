@@ -5,22 +5,28 @@ Organization Dashboard - Crescendo
 {% endblock %}
 
 {% block content %}
+<!-- Style content that doesn't belong in style.css because its specific to only organization.html -->
 <style>
     section {
-    margin: 20px auto;
-    max-width: 800px;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-h2 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-}
+    h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .text-center {
+        text-align: center;
+    }
 </style>
+<!-- Request a performance event section -->
 <section class="request-event">
     <h2>Request a Performance Event</h2>
     <form method="post" action="{{ url_for('request_event') }}">
@@ -43,7 +49,7 @@ h2 {
         <button type="submit" class="btn btn-primary" style="margin: 40px;">Submit Request</button>
     </form>
 </section>
-
+<!-- View confirmed performance events section -->
 <section class="confirmed-events">
     <h2>Confirmed Performance Events</h2>
     {% if confirmed_events %}
@@ -68,11 +74,11 @@ h2 {
                 <td>{{ event[3] }}</td>
                 <td>{{ event[4] }}</td>
                 <td>
-        <div class="musician-name" onmouseover="showProfile(this)" onmouseout="hideProfile(this)">
-            {{ event[5] }}
-            <span class="profile-tooltip">{{ event[6] }}</span>
-        </div>
-    </td>
+                    <div class="musician-name" onmouseover="showProfile(this)" onmouseout="hideProfile(this)">
+                        {{ event[5] }}
+                        <span class="profile-tooltip">{{ event[6] }}</span>
+                    </div>
+                </td>
                 <td>
                     <button onclick="confirmDeletion({{ event[0] }})" class="btn btn-danger">Delete</button>
                 </td>
@@ -84,6 +90,7 @@ h2 {
     <p>No confirmed events at this time.</p>
     {% endif %}
 </section>
+<!-- Javascript for hover + viewing an artists profile -->
 <script>
     function showProfile(element) {
         element.querySelector(".profile-tooltip").style.display = "block";
@@ -93,6 +100,7 @@ h2 {
         element.querySelector(".profile-tooltip").style.display = "none";
     }
 </script>
+<!-- Javascript for deleting an event -->
 <script>
     function confirmDeletion(eventId) {
         if (confirm("Are you sure you want to delete this event?")) {

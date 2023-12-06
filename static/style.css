@@ -1,17 +1,18 @@
-h1,
-h2,
-h3 {
-    font-family: 'Quicksand', sans-serif; /* Custom font */
+/* Header font style */
+h1, h2, h3 {
+    font-family: 'Quicksand', sans-serif; 
 }
 
+/* Body styling for full height and positioning */
 body {
     margin: 0;
     padding: 0;
-    position: relative; /* Needed for the overlay positioning */
-    min-height: 100vh; /* Ensure it covers the full viewport height */
+    position: relative;
+    min-height: 100vh;
     z-index: -1;
 }
 
+/* Styling for images with shadow and alignment */
 .styled-image {
     width: 50%;
     border-radius: 10px;
@@ -22,24 +23,19 @@ body {
     margin-top: 20px;
 }
 
-.navbar {
-    background-color: #462749; /* Darker shade for navbar */
-}
-
-.navbar-brand span {
-    color: #fff; /* White color for brand text */
-}
-
+/* Positioning for main elements and navbar */
 .main, .navbar, .navbar-custom {
     position: relative;
     z-index: 2;
 }
 
+/* Form control styling */
 .form-control {
     margin-bottom: 15px;
     border-radius: 5px;
 }
 
+/* Primary button styles */
 .btn-primary {
     background-color: #8332AC;
     border-color: #8332AC;
@@ -47,33 +43,56 @@ body {
     border-radius: 5px;
 }
 
+/* Footer styling */
 footer {
     color: #333;
     padding: 20px;
 }
 
+/* Navbar custom styles with gradient */
 .navbar-custom {
-    background-color: #333; /* Dark background */
+    background: linear-gradient(0deg, rgba(253, 253, 253, 0.0), #424242);
+    padding: 0.5rem 1rem;
 }
 
-.navbar-custom .navbar-brand,
-.navbar-custom .nav-link {
-    color: #fff; /* Light text */
-}
-
-.navbar-custom .nav-link:hover {
-    color: #f0ad4e; /* Change for hover */
-}
-
-.navbar-brand span {
+/* Styling for navbar brand and hover effect */
+.navbar-brand .brand-letter {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
     transition: all 0.3s ease;
 }
-
-.navbar-brand span:hover {
-    color: #f0ad4e; /* Color change on hover for brand */
+.navbar-brand .brand-letter:hover {
+    transform: scale(1.1);
 }
 
+/* Nav-link styling with hover effect */
+.nav-link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    color: #fff;
+}
+.nav-link:hover {
+    color: #000;
+}
 
+/* Custom navbar item margins */
+.custom-nav-item {
+    margin: 0 10px;
+    margin-right: 15px;
+}
+
+/* Navbar toggler styling */
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Navbar toggler icon with custom SVG image */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 30 30'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Landing page top section styling */
 .landing-top {
     display: flex;
     justify-content: space-between;
@@ -85,56 +104,48 @@ footer {
     width: 50%;
 }
 
+/* Login section styling with background and shadow */
 .login-section {
     width: 40%;
-    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    background: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Features section styling */
 .features {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Align items vertically center */
+    align-items: center;
 }
-
-
 .features > div {
     width: 30%;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
+    justify-content: center;
+    align-items: center;
 }
 
+/* Text section styling with color and shadow */
 .text-section {
-    color: #ffffff; /* Set text color to white */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add drop shadow for readability */
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.login-section {
-    background: #ffffff; /* Plain white background */
+/* Specific background color for login and feature sections */
+.login-section, .features > div {
+    background: #ffffff;
 }
 
-.features > div {
-    background: #ffffff; /* Plain white background for feature columns */
-}
-
-.custom-nav-item {
-    margin-right: 15px;
-}
-
-.musician-name {
+/* Musician name tooltip styles */
+.musician-name, .profile-tooltip {
     position: relative;
     cursor: pointer;
-}
-
-.profile-tooltip {
     display: none;
     background-color: #fff;
     color: #333;
@@ -151,26 +162,25 @@ footer {
     transition: opacity 0.3s ease, top 0.3s ease;
     pointer-events: none;
 }
-
 .musician-name:hover .profile-tooltip {
     display: block;
     opacity: 1;
     top: 20px;
 }
 
+/* Table styling */
 .table {
     margin-top: 20px;
     border-collapse: collapse;
     width: 100%;
 }
-
 .table th, .table td {
     padding: 8px 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-/* Improved Button Styles */
+/* Button styles with hover effects */
 .btn-success, .btn-primary {
     border: none;
     color: white;
@@ -183,49 +193,111 @@ footer {
     transition-duration: 0.4s;
     cursor: pointer;
 }
-
 .btn-success {
     background-color: #4CAF50;
 }
-
 .btn-success:hover {
     background-color: #45a049;
 }
-
 .btn-primary {
     background-color: #008CBA;
 }
-
 .btn-primary:hover {
     background-color: #007BAC;
 }
-x
-/* Tooltip for Musician Profile */
-.musician-name {
-    position: relative;
-    cursor: pointer;
-}
 
-.profile-tooltip {
-    display: none;
-    background-color: #fff;
+/* Event application page styling */
+.apply-event {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+}
+.apply-event h2 {
+    color: #8332AC;
+    margin-bottom: 20px;
+}
+.apply-event p {
+    font-size: 16px;
+    line-height: 1.6;
     color: #333;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    position: absolute;
-    z-index: 100;
-    top: 25px;
-    left: 0;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    min-width: 200px;
-    opacity: 0;
-    transition: opacity 0.3s ease, top 0.3s ease;
-    pointer-events: none;
+    margin-bottom: 15px;
 }
 
-.musician-name:hover .profile-tooltip {
-    display: block;
-    opacity: 1;
-    top: 20px;
+/* Alert style */
+.alert {
+    background-color: rgb(216, 164, 255);
+    color: #333;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Login container styling */
+.login-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 40px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.login-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Quicksand', sans-serif;
+}
+.login-form .form-group {
+    margin-bottom: 20px;
+}
+.login-button {
+    width: 100%;
+    padding: 10px 0;
+}
+.register-link a {
+    color: #8332AC;
+    text-decoration: none;
+}
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Register container styling */
+.register-container {
+    max-width: 500px;
+    margin: auto;
+    padding: 40px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.register-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Quicksand', sans-serif;
+}
+.register-form .form-group {
+    margin-bottom: 20px;
+}
+.register-button {
+    width: 100%;
+    padding: 10px 0;
+}
+.login-link a {
+    color: #8332AC;
+    text-decoration: none;
+}
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Custom styles for feature headers and paragraphs */
+.features div h3, .features div p {
+    font-family: 'Georgia', serif;
 }

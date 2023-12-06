@@ -5,6 +5,7 @@ Home - Crescendo
 {% endblock %}
 
 {% block content %}
+<!-- Style content that doesn't belong in style.css because its specific to only home.html -->
 <style>
     section {
         margin: 20px auto;
@@ -22,6 +23,11 @@ Home - Crescendo
     }
 </style>
 
+{% if notification %}
+<div class="alert alert-info" role="alert">
+    {{ notification }}
+</div>
+{% endif %}
 <!-- Section for Available Performance Events -->
 <section class="available-events">
     <h2>Available Performance Events</h2>
@@ -47,7 +53,7 @@ Home - Crescendo
                 <td>{{ event[2] }}</td>
                 <td>{{ event[3] }}</td>
                 <td>{{ event[4] }}</td>
-                <td>{{ event[6] }}</td> <!-- Organizer's name -->
+                <td>{{ event[6] }}</td>
                 <td>{{ event[5] }}</td>
                 <td>
                     <a href="{{ url_for('apply_for_event', event_id=event[0]) }}" class="btn btn-success">Apply</a>
@@ -74,7 +80,7 @@ Home - Crescendo
                 <th>Venue</th>
                 <th>Description</th>
                 <th>Organizer</th>
-                <th>Upload Image</th> <!-- Added column for upload -->
+                <th>Upload Image</th>
             </tr>
         </thead>
         <tbody>
@@ -85,9 +91,8 @@ Home - Crescendo
                 <td>{{ event[2] }}</td>
                 <td>{{ event[3] }}</td>
                 <td>{{ event[4] }}</td>
-                <td>{{ event[5] }}</td> <!-- Organizer's name -->
+                <td>{{ event[5] }}</td>
                 <td>
-                    <!-- Corrected upload link for each event -->
                     <a href="{{ url_for('upload_file', event_id=event[0]) }}" class="btn btn-primary">Upload</a>
                 </td>
             </tr>

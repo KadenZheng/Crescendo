@@ -146,7 +146,7 @@ def home():
             WHERE e.Status = 'pending'
         """)
         available_events = cursor.fetchall()
-        
+
         # Fetch confirmed events for musicians
         cursor.execute("""
             SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description,
@@ -158,7 +158,10 @@ def home():
         confirmed_events = cursor.fetchall()
 
         conn.close()
-        return render_template('home.html', events=available_events, confirmed_events=confirmed_events)
+        # Check if there is a notification message in the session
+        notification = session.pop('event_notification', None)
+        # Render and return the 'home.html' template passing in the events, confirmed_events, and notification parameters
+        return render_template('home.html', events=available_events, confirmed_events=confirmed_events, notification=notification)
 
     elif user_type == 'organization':
         # Render organization dashboard
@@ -301,33 +304,47 @@ def organization():
     # Render organization dashboard
     return render_template('organization.html', confirmed_events=confirmed_events)
 
+
 @app.route('/delete_event/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
-    if 'user_id' not in session:
-        flash("Please log in to perform this action.")
+    # Ensure the user is logged in and has the appropriate user type
+    if 'user_id' not in session or session.get('user_type') != 'organization':
+        flash("Unauthorized access.")
         return redirect(url_for('login'))
 
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
     try:
-        # Delete from Bookings table
-        cursor.execute("DELETE FROM Bookings WHERE EventID = ?", (event_id,))
+        # Retrieve event details before deletion
+        cursor.execute(
+            "SELECT Date, Time, Venue, Description FROM Events WHERE EventID = ?", (event_id,))
+        event = cursor.fetchone()
 
-        # Delete from Events table
-        cursor.execute("DELETE FROM Events WHERE EventID = ?", (event_id,))
+        if event:
+            # Delete the event from Bookings and Events tables
+            cursor.execute(
+                "DELETE FROM Bookings WHERE EventID = ?", (event_id,))
+            cursor.execute("DELETE FROM Events WHERE EventID = ?", (event_id,))
 
-        conn.commit()
-        flash("Event deleted successfully!")
+            # Create a notification message with event details
+            notification_msg = f"Event on {event[0]} at {
+                event[1]} ({event[2]}) has been cancelled."
+            session['event_notification'] = notification_msg
+
+            conn.commit()
+            flash("Event deleted successfully.")
+        else:
+            flash("Event not found.")
     except sqlite3.Error as e:
+        # Return an error message if an error occurs while fetching the user record
         print(e)
         flash("An error occurred while deleting the event.")
     finally:
         conn.close()
 
+    # Redirect to the organization home page
     return redirect(url_for('organization'))
-
-
 
 
 # Reference the directory named 'uploads' in the 'static' folder
@@ -399,6 +416,7 @@ def upload_file(event_id):
 def uploaded_file(filename):
     # Logic to display the uploaded file
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 # Define a route for the gallery
 @app.route('/gallery')
