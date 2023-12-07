@@ -39,6 +39,13 @@ or
 ```bash
 flask run
 ```
+
+# Crescendo Video Presentation
+Please use the following link to view a three minute summary and walkthrough of **Crescendo**!
+
+**https://www.youtube.com/watch?v=vyZ7MXfDJ-8**
+
+---
 # Crescendo Usage Guide
 
 ## Table of Contents
@@ -127,10 +134,7 @@ The gallery showcases images from past events.
 2. Browse through event images and details.
 
 
-# Crescendo Video Presentation
-Please use the following link to view a three minute summary and walkthrough of **Crescendo**!
 
-**https://www.youtube.com/watch?v=vyZ7MXfDJ-8**
 
 ---
 ---
