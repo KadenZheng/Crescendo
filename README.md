@@ -126,6 +126,12 @@ The gallery showcases images from past events.
 1. Click on the **Gallery** link in the navigation bar.
 2. Browse through event images and details.
 
+
+# Crescendo Video Presentation
+Please use the following link to view a three minute summary and walkthrough of **Crescendo**!
+
+**https://www.youtube.com/watch?v=vyZ7MXfDJ-8**
+
 ---
 ---
 

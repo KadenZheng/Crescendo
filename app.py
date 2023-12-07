@@ -436,6 +436,8 @@ def gallery():
     # Render and return the 'gallery.html' template with the images parameter
     return render_template('gallery.html', images=images)
 
+# Route to update profile
+
 
 @app.route('/update_profile', methods=['GET', 'POST'])
 def update_profile():
@@ -461,6 +463,7 @@ def update_profile():
         finally:
             conn.close()
 
+        # Check if the user data was found
         if user_data:
             user = {
                 'username': user_data[0],
@@ -480,9 +483,6 @@ def update_profile():
         user_type = request.form['user_type']
         profile_info = request.form.get('profile_info', '')
 
-        # Perform your validation here (if necessary)
-        # ...
-
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
 
@@ -500,9 +500,11 @@ def update_profile():
         finally:
             conn.close()
 
+        # Redirect to the home page after updating the profile
         return redirect(url_for('home'))
 
 
+# Route to view profile
 @app.route('/profile/<int:user_id>')
 def view_profile(user_id):
     # Ensure the user is logged in
@@ -513,6 +515,7 @@ def view_profile(user_id):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     try:
+        # Fetch the user's data
         cursor.execute(
             "SELECT Username, Email, UserType, ProfileInformation FROM Users WHERE UserID = ?", (user_id,))
         user_data = cursor.fetchone()
@@ -523,6 +526,7 @@ def view_profile(user_id):
     finally:
         conn.close()
 
+    # Check if the user data was found
     if user_data:
         user = {
             'username': user_data[0],
@@ -530,9 +534,11 @@ def view_profile(user_id):
             'user_type': user_data[2],
             'profile_info': user_data[3]
         }
+        # Render and return the 'profile.html' template with the user parameter
         return render_template('profile.html', user=user)
     else:
         flash("User not found.")
+        # Redirect to the organization home page if the user is not found
         return redirect(url_for('organization'))
 
 
