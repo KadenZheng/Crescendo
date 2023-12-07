@@ -305,6 +305,7 @@ footer {
     font-family: 'Georgia', serif;
 }
 
+/* Profile container styling */
 .profile-container {
     background: #ffffff;
     border-radius: 10px;
@@ -327,6 +328,7 @@ footer {
     font-weight: bold;
 }
 
+/* Back button styling */
 .back-button {
     display: inline-block;
     margin-bottom: 20px;
