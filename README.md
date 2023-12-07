@@ -1,7 +1,7 @@
 # Crescendo
 
 ## Introduction
-Crescendo is a web-based application designed to build connections between young musicians and organizations in the Fresno community. The platform enables organizations to request performances from local talent and manage event details, while offering musicians the opportunity to showcase their artistry and engage in community events.
+Crescendo is a web-based application designed to build connections between young musicians and organizations in the Fresno (any, really) community. The platform enables organizations to request performances from artists and manage event details, while offering musicians the opportunity to showcase their artistry and engage in community events.
 
 ## Technologies
 - **Backend:** Python, Flask
@@ -14,7 +14,7 @@ Crescendo is a web-based application designed to build connections between young
 - **Profile Viewing:** Organizations can view the profiles of musicians registered for their events.
 - **Event Management:** Organizations can request new performance events, while musicians can view available events and apply for them.
 - **Gallery:** A dedicated page showcasing images from past events (uploaded by the musicians), highlighting the community's engagements.
-- **Responsive Design:** The website is fully responsive and can be accessed on various devices and screen sizes.
+- **Responsive Design:** The website is fully responsive and can be accessed on various devices/screen sizes.
 
 
 ## Installation and Setup
@@ -64,9 +64,9 @@ To use Crescendo, users must first register an account. There are two types of u
 ### Steps for Registration:
 1. Navigate to the **Register** page from the main menu.
 2. Fill in the required fields:
-   - Username (must be unique)
+   - Username (must be unique and alphanumeric)
    - Email Address
-   - Password
+   - Password (at least eight letters, alphanumeric, must include one number and one uppercase letter)
    - User Type (Musician or Organization)
    - Profile Information (optional)
 3. Click the **Register** button to create your account.
@@ -127,7 +127,7 @@ Musicians can apply for available events.
 3. Confirm your application.
 
 ## Gallery
-The gallery showcases images from past events.
+The gallery showcases images (uploaded by the musician) from past and confirmed events.
 
 ### Viewing the Gallery:
 1. Click on the **Gallery** link in the navigation bar.
