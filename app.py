@@ -1,3 +1,4 @@
+# Import necessary modules
 from flask import Flask, flash, render_template, request, redirect, url_for, session, send_from_directory
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -286,12 +287,11 @@ def organization():
     # Fetch confirmed events for the logged-in organization
     try:
         cursor.execute("""
-            SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, 
-                   u.Username, u.ProfileInformation
+            SELECT e.EventID, e.Date, e.Time, e.Venue, e.Description, u.UserID, u.Username
             FROM Events e
-            LEFT JOIN Bookings b ON e.EventID = b.EventID AND b.Status = 'confirmed'
-            LEFT JOIN Users u ON b.MusicianUserID = u.UserID
-            WHERE e.OrganizerUserID = ? AND e.Status = 'confirmed'
+            JOIN Bookings b ON e.EventID = b.EventID AND b.Status = 'confirmed'
+            JOIN Users u ON b.MusicianUserID = u.UserID
+            WHERE e.OrganizerUserID = ?
         """, (user_id,))
         confirmed_events = cursor.fetchall()
     except sqlite3.Error as e:
@@ -435,6 +435,105 @@ def gallery():
     conn.close()
     # Render and return the 'gallery.html' template with the images parameter
     return render_template('gallery.html', images=images)
+
+
+@app.route('/update_profile', methods=['GET', 'POST'])
+def update_profile():
+    # Ensure the user is logged in
+    if 'user_id' not in session:
+        flash("Please log in to update your profile.")
+        return redirect(url_for('login'))
+
+    # Handle the GET request (display the form with current user data)
+    if request.method == 'GET':
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+
+        try:
+            # Fetch the current user's data
+            cursor.execute(
+                "SELECT Username, Email, UserType, ProfileInformation FROM Users WHERE UserID = ?", (session['user_id'],))
+            user_data = cursor.fetchone()
+        except sqlite3.Error as e:
+            print(e)
+            flash("An error occurred while fetching user data.")
+            return redirect(url_for('home'))
+        finally:
+            conn.close()
+
+        if user_data:
+            user = {
+                'username': user_data[0],
+                'email': user_data[1],
+                'user_type': user_data[2],
+                'profile_info': user_data[3]
+            }
+            return render_template('profile_edit.html', user=user)
+        else:
+            flash("User not found.")
+            return redirect(url_for('home'))
+
+    # Handle the POST request (update user data)
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        user_type = request.form['user_type']
+        profile_info = request.form.get('profile_info', '')
+
+        # Perform your validation here (if necessary)
+        # ...
+
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+
+        try:
+            # Update user information in the database
+            cursor.execute("""
+                UPDATE Users SET Username = ?, Email = ?, UserType = ?, ProfileInformation = ?
+                WHERE UserID = ?
+            """, (username, email, user_type, profile_info, session['user_id']))
+            conn.commit()
+            flash("Profile updated successfully!")
+        except sqlite3.Error as e:
+            print(e)
+            flash("An error occurred while updating the profile.")
+        finally:
+            conn.close()
+
+        return redirect(url_for('home'))
+
+
+@app.route('/profile/<int:user_id>')
+def view_profile(user_id):
+    # Ensure the user is logged in
+    if 'user_id' not in session:
+        flash("Please log in to view profiles.")
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "SELECT Username, Email, UserType, ProfileInformation FROM Users WHERE UserID = ?", (user_id,))
+        user_data = cursor.fetchone()
+    except sqlite3.Error as e:
+        print(e)
+        flash("An error occurred while fetching user data.")
+        return redirect(url_for('organization'))
+    finally:
+        conn.close()
+
+    if user_data:
+        user = {
+            'username': user_data[0],
+            'email': user_data[1],
+            'user_type': user_data[2],
+            'profile_info': user_data[3]
+        }
+        return render_template('profile.html', user=user)
+    else:
+        flash("User not found.")
+        return redirect(url_for('organization'))
 
 
 # Run the Flask application

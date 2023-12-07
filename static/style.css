@@ -1,6 +1,8 @@
 /* Header font style */
-h1, h2, h3 {
-    font-family: 'Quicksand', sans-serif; 
+h1,
+h2,
+h3 {
+    font-family: 'Quicksand', sans-serif;
 }
 
 /* Body styling for full height and positioning */
@@ -9,7 +11,6 @@ body {
     padding: 0;
     position: relative;
     min-height: 100vh;
-    z-index: -1;
 }
 
 /* Styling for images with shadow and alignment */
@@ -24,7 +25,9 @@ body {
 }
 
 /* Positioning for main elements and navbar */
-.main, .navbar, .navbar-custom {
+.main,
+.navbar,
+.navbar-custom {
     position: relative;
     z-index: 2;
 }
@@ -61,6 +64,7 @@ footer {
     font-weight: 700;
     transition: all 0.3s ease;
 }
+
 .navbar-brand .brand-letter:hover {
     transform: scale(1.1);
 }
@@ -72,6 +76,7 @@ footer {
     transition: color 0.3s ease;
     color: #fff;
 }
+
 .nav-link:hover {
     color: #000;
 }
@@ -98,8 +103,9 @@ footer {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 200px;
-    margin-top: 200px; 
+    margin-top: 200px;
 }
+
 .text-section {
     width: 50%;
 }
@@ -119,7 +125,8 @@ footer {
     justify-content: space-between;
     align-items: center;
 }
-.features > div {
+
+.features>div {
     width: 30%;
     padding: 10px;
     background: rgba(255, 255, 255, 0.8);
@@ -138,35 +145,11 @@ footer {
 }
 
 /* Specific background color for login and feature sections */
-.login-section, .features > div {
+.login-section,
+.features>div {
     background: #ffffff;
 }
 
-/* Musician name tooltip styles */
-.musician-name, .profile-tooltip {
-    position: relative;
-    cursor: pointer;
-    display: none;
-    background-color: #fff;
-    color: #333;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    position: absolute;
-    z-index: 100;
-    top: 25px;
-    left: 0;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    min-width: 200px;
-    opacity: 0;
-    transition: opacity 0.3s ease, top 0.3s ease;
-    pointer-events: none;
-}
-.musician-name:hover .profile-tooltip {
-    display: block;
-    opacity: 1;
-    top: 20px;
-}
 
 /* Table styling */
 .table {
@@ -174,14 +157,17 @@ footer {
     border-collapse: collapse;
     width: 100%;
 }
-.table th, .table td {
+
+.table th,
+.table td {
     padding: 8px 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
 /* Button styles with hover effects */
-.btn-success, .btn-primary {
+.btn-success,
+.btn-primary {
     border: none;
     color: white;
     padding: 5px 10px;
@@ -193,15 +179,19 @@ footer {
     transition-duration: 0.4s;
     cursor: pointer;
 }
+
 .btn-success {
     background-color: #4CAF50;
 }
+
 .btn-success:hover {
     background-color: #45a049;
 }
+
 .btn-primary {
     background-color: #008CBA;
 }
+
 .btn-primary:hover {
     background-color: #007BAC;
 }
@@ -216,10 +206,12 @@ footer {
     margin: 40px auto;
     text-align: center;
 }
+
 .apply-event h2 {
     color: #8332AC;
     margin-bottom: 20px;
 }
+
 .apply-event p {
     font-size: 16px;
     line-height: 1.6;
@@ -247,22 +239,27 @@ footer {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
+
 .login-title {
     margin-bottom: 20px;
     color: #333;
     font-family: 'Quicksand', sans-serif;
 }
+
 .login-form .form-group {
     margin-bottom: 20px;
 }
+
 .login-button {
     width: 100%;
     padding: 10px 0;
 }
+
 .register-link a {
     color: #8332AC;
     text-decoration: none;
 }
+
 .register-link a:hover {
     text-decoration: underline;
 }
@@ -277,27 +274,60 @@ footer {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
+
 .register-title {
     margin-bottom: 20px;
     color: #333;
     font-family: 'Quicksand', sans-serif;
 }
+
 .register-form .form-group {
     margin-bottom: 20px;
 }
+
 .register-button {
     width: 100%;
     padding: 10px 0;
 }
+
 .login-link a {
     color: #8332AC;
     text-decoration: none;
 }
+
 .login-link a:hover {
     text-decoration: underline;
 }
 
 /* Custom styles for feature headers and paragraphs */
-.features div h3, .features div p {
+.features div h3,
+.features div p {
     font-family: 'Georgia', serif;
+}
+
+.profile-container {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.profile-header {
+    border-bottom: 1px solid #eaeaea;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+.profile-info {
+    font-size: 16px;
+}
+
+.profile-info label {
+    font-weight: bold;
+}
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
 }

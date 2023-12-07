@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Edit Profile - Crescendo
+{% endblock %}
+
+{% block custom_css %}
+<link href="/static/custom_style.css" rel="stylesheet"> <!-- Link to additional CSS if needed -->
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Edit Profile</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="post" action="{{ url_for('update_profile') }}" class="shadow p-4 rounded bg-light">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="user_type" class="form-label">User Type</label>
+                    <select class="form-select" id="user_type" name="user_type" required>
+                        <option value="musician" {% if user.user_type == 'musician' %} selected {% endif %}>Musician</option>
+                        <option value="organization" {% if user.user_type == 'organization' %} selected {% endif %}>Organization</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="profile_info" class="form-label">Profile Information</label>
+                    <textarea class="form-control" id="profile_info" name="profile_info" rows="4">{{ user.profile_info }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

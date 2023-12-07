@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ user.username }}'s Profile - Crescendo
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2 class="text-center">{{ user.username }}'s Profile</h2>
+        </div>
+        <div class="profile-info">
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Username:</label>
+                <div class="col-sm-8">
+                    <p class="form-control-plaintext">{{ user.username }}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Email:</label>
+                <div class="col-sm-8">
+                    <p class="form-control-plaintext">{{ user.email }}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">User Type:</label>
+                <div class="col-sm-8">
+                    <p class="form-control-plaintext">{{ user.user_type }}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Profile Information:</label>
+                <div class="col-sm-8">
+                    <p class="form-control-plaintext">{{ user.profile_info }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="javascript:history.back()" class="btn btn-secondary back-button" style="margin-top: 30px">Done</a>
+</div>
+{% endblock %}
