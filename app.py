@@ -16,7 +16,7 @@ secret_key = secrets.token_hex(16)
 app.secret_key = secret_key  # Set the secret key for the Flask application
 
 # Define the path to the SQLite database file
-DATABASE = '/Users/laptopcartuser/vscode/crescendo/crescendo.db'
+DATABASE = './crescendo.db'
 
 
 # Define a route for the landing page
